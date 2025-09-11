@@ -30,8 +30,11 @@ public class Exercise {
     @Column(length = 100)
     private String targetGroup;
 
-    @Column(nullable = false, length = 255)
+    @Column(length = 255)
     private String videoUrl;
+
+    @Column(nullable = false)
+    private boolean isgookmin100;
 
     public Exercise(String title, String category, String exerciseTool, String bodyPart, String targetGroup, String videoUrl){
         this.title = title;
@@ -40,5 +43,15 @@ public class Exercise {
         this.bodyPart = bodyPart;
         this.targetGroup = targetGroup;
         this.videoUrl = videoUrl;
+        this.isgookmin100 = true;
+    }
+
+    public Exercise(String title, String category, String exerciseTool, String bodyPart, String targetGroup){
+        this.title = title;
+        this.category = category;
+        this.exerciseTool = exerciseTool;
+        this.bodyPart = bodyPart;
+        this.targetGroup = targetGroup;
+        this.isgookmin100 = false;
     }
 }
