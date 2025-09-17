@@ -27,7 +27,7 @@ public class ExerciseService {
     private String serviceKey;
 
     // [수정] 테스트를 위해 guideUrl만 남김
-    @Value("${exercise.api.baseUrl.guide}")
+    @Value("${exercise.api.baseUrl.fitnessTest}")
     private String guideUrl;
 
     /**
