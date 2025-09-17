@@ -2,7 +2,7 @@ package com.example.nationalfitnessapp.service;
 
 import com.example.nationalfitnessapp.domain.Facility;
 import com.example.nationalfitnessapp.repository.FacilityRepository;
-import com.example.nationalfitnessapp.dto.ApiResponse;
+import com.example.nationalfitnessapp.dto.FacilityApiResponse;
 import com.example.nationalfitnessapp.dto.FacilityDto;
 
 import lombok.RequiredArgsConstructor;
@@ -52,14 +52,14 @@ public class FacilityService {
                     .toUriString();
 
             // 2. 완성된 URL을 uri 메서드에 직접 전달
-            ApiResponse apiResponse = webClient.get()
+            FacilityApiResponse facilityApiResponse = webClient.get()
                     .uri(url)
                     .retrieve()
-                    .bodyToMono(ApiResponse.class)
+                    .bodyToMono(FacilityApiResponse.class)
                     .block();
 
             // 3. 응답 데이터에서 실제 시설 목록(List<FacilityDto>) 추출
-            List<FacilityDto> dtoList = extractFacilityDtos(apiResponse);
+            List<FacilityDto> dtoList = extractFacilityDtos(facilityApiResponse);
             if (dtoList.isEmpty()) {
                 log.warn("API로부터 유효한 시설 데이터를 받아오지 못했거나, 모든 데이터가 이미 존재합니다.");
                 continue;
@@ -82,12 +82,12 @@ public class FacilityService {
 
 
     // 중첩된 ApiResponse 객체에서 FacilityDto 리스트를 안전하게 추출하는 헬퍼 메서드
-    private List<FacilityDto> extractFacilityDtos(ApiResponse apiResponse){
-        if (apiResponse != null &&
-            apiResponse.getBody() != null &&
-            apiResponse.getBody().getItems() != null &&
-            apiResponse.getBody().getItems().getFacilityList() != null) {
-            return apiResponse.getBody().getItems().getFacilityList();
+    private List<FacilityDto> extractFacilityDtos(FacilityApiResponse facilityApiResponse){
+        if (facilityApiResponse != null &&
+            facilityApiResponse.getBody() != null &&
+            facilityApiResponse.getBody().getItems() != null &&
+            facilityApiResponse.getBody().getItems().getFacilityList() != null) {
+            return facilityApiResponse.getBody().getItems().getFacilityList();
         }
         return Collections.emptyList();
     }

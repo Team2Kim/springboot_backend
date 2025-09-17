@@ -9,8 +9,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @XmlAccessorType(XmlAccessType.FIELD)
-public class ApiBody {
+public class FacilityApiBody {
 
     @XmlElement(name = "items")
-    private ApiItems items;
+    private FacilityApiItems items;
 }

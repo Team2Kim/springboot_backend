@@ -11,7 +11,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @XmlAccessorType(XmlAccessType.FIELD)
-public class ApiItems {
+public class FacilityApiItems {
 
     @XmlElement(name = "item")
     private List<FacilityDto> facilityList;
