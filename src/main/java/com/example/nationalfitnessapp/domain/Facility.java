@@ -1,9 +1,7 @@
 package com.example.nationalfitnessapp.domain;
 import jakarta.persistence.*;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.NoArgsConstructor;;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
@@ -11,61 +9,47 @@ import java.time.LocalDateTime;
 @Table(name = "Facility")
 @Getter
 @Setter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)  // JPA를 위한 기본 생성자
+@AllArgsConstructor  // 모든 필드를 받는 생성자 (선택사항)
+@Builder  // 빌더 패턴 자동 생성
 public class Facility {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long facilityId;
 
-    @Column(nullable = false, length = 30)
+    @Column(nullable = false, length = 100)
     private String name;
 
-    @Column(nullable = false, length = 30)
+    @Column(length = 100)
     private String groupName;
 
-    @Column(nullable = false, length = 30)
+    @Column(length = 100)
     private String typeName;
 
-    @Column(nullable = false, length = 30)
+    @Column(length = 100)
     private String categoryName;
 
-    @Column(nullable = false, length = 30)
+    @Column(length = 100)
     private String status;
 
-    @Column(nullable = false, length = 100)
+    @Column(length = 100)
     private String postalCode;
 
-    @Column(nullable = false, length = 100)
+    @Column(length = 100)
     private String roadAddress;
 
-    @Column(nullable = false)  // Dto
+    @Column
     private Double latitude;
 
-    @Column(nullable = false)
+    @Column
     private Double longitude;
 
-    @Column(nullable = false, length = 30)
+    @Column(length = 100)
     private String phoneNumber;
 
-    @Column(nullable = false)
-    private boolean isOpen;
-
-    @Column(nullable = false)
+    @Column
     private LocalDateTime lastUpdateDate;
 
-    public Facility(String name, String groupName, String typeName, String categoryName, String status, String postalCode,
-                    String roadAddress, Double latitude, Double longitude, String phoneNumber, boolean isOpen, LocalDateTime lastUpdateDate){
-        this.name = name;
-        this.groupName = groupName;
-        this.typeName = typeName;
-        this.categoryName = categoryName;
-        this.status = status;
-        this.postalCode = postalCode;
-        this.roadAddress = roadAddress;
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.phoneNumber = phoneNumber;
-        this.isOpen = isOpen;
-        this.lastUpdateDate = lastUpdateDate;
-    }
+    @Column
+    private String isNation;
 }
