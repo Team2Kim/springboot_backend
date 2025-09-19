@@ -126,6 +126,7 @@ public class ExerciseDto {
                 .repetitionCountName(this.rpttTcntNm)
                 .setCountName(this.setCntNm)
                 .operationName(this.operNm)
+                .jobYmd(this.jobYmd)
                 .isGookmin100(true)
                 .build();
     }

@@ -98,6 +98,9 @@ public class Exercise {
     @Column(length = 50)
     private String operationName; // oper_nm (운영 명칭)
 
+    @Column(length = 50)
+    private String jobYmd;
+
     // --- isGookmin100 플래그 ---
     // API 데이터는 isGookmin100 = true, 직접 입력 데이터는 isGookmin100 = false 로 사용
     @Column(nullable = false)
