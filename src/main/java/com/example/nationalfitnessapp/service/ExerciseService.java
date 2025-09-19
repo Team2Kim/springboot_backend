@@ -4,6 +4,7 @@ import com.example.nationalfitnessapp.domain.Exercise;
 import com.example.nationalfitnessapp.dto.ExerciseApiResponse;
 import com.example.nationalfitnessapp.dto.ExerciseDto;
 import com.example.nationalfitnessapp.repository.ExerciseRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -72,5 +73,16 @@ public class ExerciseService {
             }
         }
         log.info("테스트 저장 완료. 총 {}개의 새로운 영상을 저장했습니다.", savedCount);
+    }
+
+    /*
+    * ID로 운동 영상 1건을 조회하는 메서드
+    * @param exerciseId 조회할 운동 영상 데이터의 ID
+    * @return 찾아낸 Exercise 엔티티
+    * */
+    public Exercise findByExerciseId(long exerciseId){
+        // repository의 findById는 Optional<Exercise>를 반환한다.
+        // orElseThrow()를 사용해 데이터가 없으면 예외를 발생시킨다.
+        return exerciseRepository.findById(exerciseId).orElseThrow(() -> new EntityNotFoundException("해당 ID의 운동영상을 찾을 수 없습니다."));
     }
 }
