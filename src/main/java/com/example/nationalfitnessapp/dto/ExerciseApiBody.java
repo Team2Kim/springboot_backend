@@ -13,4 +13,8 @@ public class ExerciseApiBody {
 
     @XmlElement(name = "items")
     private ExerciseApiItems items;
+
+    // 이 필드를 추가해야 totalCount를 동적으로 가져올 수 있다.
+    @XmlElement(name = "totalCount")
+    private int totalCount;
 }

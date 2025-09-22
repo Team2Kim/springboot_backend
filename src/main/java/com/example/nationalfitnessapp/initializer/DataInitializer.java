@@ -22,8 +22,8 @@ public class DataInitializer implements ApplicationRunner{  // 2. ApplicationRun
         log.info("=============================================");
         log.info("========= 데이터 초기화 작업을 시작합니다. ========");
 
-        // facilityService.fetchAndSaveFacilities();  // 서비스의 메서드 호출
-        // exerciseService.fetchAndSaveAllExercises();  // 서비스의 메서드 호출
+        // exerciseService.fetchAndSaveAllExercises();  // 운동영상 데이터 로드
+        //facilityService.fetchAndSaveFacilities();  // 시설 데이터 로드
 
         log.info("======= 데이터 초기화 작업이 완료되었습니다. =======");
         log.info("=============================================");
