@@ -40,7 +40,7 @@ public class FacilityService {
         int savedCount = 0;
 
 
-        for (int i = 1; i <= 147; i++) {  // xml.body를 확인했을 때 totalCount가 146746으로 확인되어서 100을 나눈 뒤 반올림값 1468번 반복
+        for (int i = 1; i <= 147; i++) {  // 데이터 다운로드 완료
             // 1. UriComponentsBuilder를 사용해 전체 URL과 파라미터를 먼저 조합
             String url = UriComponentsBuilder.fromHttpUrl(baseUrl)
                     .queryParam("serviceKey", serviceKey)
