@@ -64,6 +64,7 @@ public class ExerciseService {
     }
 
     /**
+     * 데이터 다운로드 완료
      * 특정 API의 전체 데이터를 페이징하여 가져오는 공통 헬퍼 메서드
      * @param baseUrl 호출할 API의 Base URL
      * @param apiName 로그에 표시할 API 이름
@@ -126,7 +127,7 @@ public class ExerciseService {
         return totalSavedCountInApi;
     }
 
-    /**
+    /*
      * WebClient를 사용해 실제 API를 호출하는 공통 메서드
      */
     private ExerciseApiResponse callApi(String baseUrl, int pageNo, int numOfRows) {
