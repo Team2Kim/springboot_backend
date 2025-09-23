@@ -1,6 +1,7 @@
 package com.example.nationalfitnessapp.service;
 
 import com.example.nationalfitnessapp.domain.Exercise;
+import com.example.nationalfitnessapp.repository.ExerciseSpecification;
 import com.example.nationalfitnessapp.dto.ExerciseApiResponse;
 import com.example.nationalfitnessapp.dto.ExerciseDto;
 import com.example.nationalfitnessapp.repository.ExerciseRepository;
@@ -12,6 +13,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriComponentsBuilder;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 
 import java.util.List;
 
@@ -159,5 +163,41 @@ public class ExerciseService {
     public Exercise findByExerciseId(long exerciseId){
         return exerciseRepository.findById(exerciseId)
                 .orElseThrow(() -> new EntityNotFoundException("해당 ID의 운동영상을 찾을 수 없습니다: " + exerciseId));
+    }
+
+    /**
+     * 모든 운동 영상을 페이징하여 조회하거나, 키워드로 검색하는 메서드
+     * @param keyword 검색할 키워드 (없으면 전체 조회)
+     * @param targetGroup 타켓 그룹 (조건 검색에 사용)
+     * @param fitnessFactorName 운동 체력 항목 (조건 검색에 사용)
+     * @param bodyPart 운동 부위 (조건 검색에 사용)
+     * @param exerciseTool 운동 도구 (조건 검색에 사용)
+     * @param pageable 페이징 및 정렬 정보
+     * @return 페이징된 Exercise 데이터
+     * */
+    public Page<Exercise> findAll(String keyword, String targetGroup, String fitnessFactorName, String bodyPart, String exerciseTool, Pageable pageable){
+
+        // 1. 기본 검색 조건 생성 (아무 조건도 없는 상태)
+        Specification<Exercise> spec = ExerciseSpecification.Empty();
+
+        // 2. 각 파라미터가 존재하면, AND 조건으로 레고 블록을 조립
+        if (keyword != null && !keyword.isEmpty()) {
+            spec = spec.and(ExerciseSpecification.likeTitle(keyword));
+        }
+        if (targetGroup != null && !targetGroup.isEmpty()) {
+            spec = spec.and(ExerciseSpecification.equalTargetGroup(targetGroup));
+        }
+        if (fitnessFactorName != null && !fitnessFactorName.isEmpty()) {
+            spec = spec.and(ExerciseSpecification.equalFitnessFactorName(fitnessFactorName));
+        }
+        if (bodyPart != null && !bodyPart.isEmpty()) {
+            spec = spec.and(ExerciseSpecification.equalBodyPart(bodyPart));
+        }
+        if (exerciseTool != null && !exerciseTool.isEmpty()) {
+            spec = spec.and(ExerciseSpecification.equalExerciseTool(exerciseTool));
+        }
+
+        // 최종 완성된 조건으로 Repository에 조회 요청
+        return exerciseRepository.findAll(spec, pageable);
     }
 }
