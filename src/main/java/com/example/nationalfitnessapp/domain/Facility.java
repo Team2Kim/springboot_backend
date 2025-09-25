@@ -1,9 +1,8 @@
 package com.example.nationalfitnessapp.domain;
 import jakarta.persistence.*;
-
 import lombok.*;
-
 import java.time.LocalDateTime;
+import org.locationtech.jts.geom.Point;
 
 @Entity
 @Table(name = "Facility")
@@ -52,4 +51,7 @@ public class Facility {
 
     @Column
     private String isNation;
+
+    @Column(columnDefinition = "POINT SRID 4326")
+    private Point location;
 }
