@@ -22,19 +22,15 @@ public interface FacilityRepository extends JpaRepository<Facility, Long>, JpaSp
     * */
     boolean existsByRoadAddress(String roadAddress);
 
-    // [수정] 반환 타입을 간단하게 Page<Facility>로 변경
     @Query(value = "SELECT * FROM facility f " +
             "ORDER BY ST_DISTANCE_SPHERE(f.location, ST_PointFromText(:point, 4326))",
             countQuery = "SELECT count(*) FROM facility",
             nativeQuery = true)
     Page<Facility> findFacilitiesOrderByDistance(@Param("point") String point, Pageable pageable);
 
-    // [수정] 지도 API도 간단하게 List<Facility>를 반환하도록 변경
     @Query(value = "SELECT * FROM facility f " +
             "WHERE ST_DISTANCE_SPHERE(f.location, ST_PointFromText(:point, 4326)) <= :radius " +
             "ORDER BY ST_DISTANCE_SPHERE(f.location, ST_PointFromText(:point, 4326))",
             nativeQuery = true)
     List<Facility> findFacilitiesWithinRadius(@Param("point") String point, @Param("radius") int radius);
-
-    //
 }
