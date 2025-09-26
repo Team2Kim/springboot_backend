@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
@@ -30,14 +31,22 @@ public class FacilityRepositoryImpl implements FaciltiyRepositoryCustom {
             parameters.put("name", "%" + name + "%");
         }
         if (categoryName != null && !categoryName.isEmpty()) {
-            if ("기타".equals(categoryName)) {
-                List<String> mainCategories = List.of("축구장", "야구장", "체육관", "수영장", "풋살장", "종합체육시설");
-                sql.append(" AND f.category_name NOT IN :mainCategories");
-                parameters.put("mainCategories", mainCategories);
-            } else {
-                sql.append(" AND f.category_name = :categoryName");
-                parameters.put("categoryName", categoryName);
+            // 2-1. 콤마(,)를 기준으로 키워드를 분리해 List로 만듭니다.
+            List<String> keywords = Arrays.asList(categoryName.split(","));
+
+            // 2-2. (f.category_name LIKE ? OR f.category_name LIKE ? ...) 형태의 SQL 구문을 생성합니다.
+            sql.append(" AND (");
+            for (int i = 0; i < keywords.size(); i++) {
+                if (i > 0) {
+                    sql.append(" OR ");
+                }
+                String paramName = "categoryKeyword" + i;
+                sql.append("f.category_name LIKE :").append(paramName);
+
+                // 2-3. 파라미터 맵에 각 키워드를 추가합니다. (앞뒤 공백 제거 및 % 와일드카드 추가)
+                parameters.put(paramName, "%" + keywords.get(i).trim() + "%");
             }
+            sql.append(")");
         }
 
         // 3. 거리순 정렬이 필요한 경우 ORDER BY 절 추가
@@ -79,14 +88,22 @@ public class FacilityRepositoryImpl implements FaciltiyRepositoryCustom {
             countParameters.put("name", "%" + name + "%");
         }
         if (categoryName != null && !categoryName.isEmpty()) {
-            if ("기타".equals(categoryName)) {
-                List<String> mainCategories = List.of("축구장", "야구장", "체육관", "수영장", "풋살장", "종합체육시설");
-                countSql.append(" AND f.category_name NOT IN :mainCategories");
-                countParameters.put("mainCategories", mainCategories);
-            } else {
-                countSql.append(" AND f.category_name = :categoryName");
-                countParameters.put("categoryName", categoryName);
+            // 1. 콤마(,)를 기준으로 키워드 분리
+            List<String> keywords = Arrays.asList(categoryName.split(","));
+
+            // 2. (f.category_name LIKE ? OR f.category_name LIKE ? ...) SQL 구문 생성
+            countSql.append(" AND (");
+            for (int i = 0; i < keywords.size(); i++) {
+                if (i > 0) {
+                    countSql.append(" OR ");
+                }
+                String paramName = "categoryKeyword" + i;
+                countSql.append("f.category_name LIKE :").append(paramName);
+
+                // 3. 파라미터 맵에 키워드 추가
+                countParameters.put(paramName, "%" + keywords.get(i).trim() + "%");
             }
+            countSql.append(")");
         }
 
         Query countQuery = entityManager.createNativeQuery(countSql.toString());
