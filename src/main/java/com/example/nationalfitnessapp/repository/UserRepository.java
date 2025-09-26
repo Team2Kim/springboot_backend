@@ -18,4 +18,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     // loginId를 기준으로 DB에서 사용자 정보를 가져오는 기능 (해당하는 사용자가 없을 수도 있으므로 Optional로 감싸서 반환
     Optional<User> findByLoginId(String loginId);
+
+    // Refresh Token으로 사용자를 찾기 위한 메서드
+    Optional<User> findByRefreshToken(String refreshToken);
 }
