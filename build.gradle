@@ -39,6 +39,9 @@ dependencies {
 	// WebClient를 사용하기 위한 의존성
 	implementation 'org.springframework.boot:spring-boot-starter-webflux'
 
+	// 기본 웹 서버 구동용 (MVC)
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+
 	// 공간 데이터 타입을 사용하기 위한 의존성
 	implementation 'org.hibernate.orm:hibernate-spatial'
 
