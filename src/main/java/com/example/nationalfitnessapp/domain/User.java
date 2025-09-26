@@ -1,4 +1,5 @@
 package com.example.nationalfitnessapp.domain;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import lombok.AllArgsConstructor;  // 모든 필드를 파라미터로 가지는 생성자 자동 생성
@@ -35,8 +36,17 @@ public class User {
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
+    @JsonIgnore
+    @Column(length = 512)
+    private String refreshToken;
+
     @PrePersist  // 엔티티가 생성될 때 이 메서드를 호출한다.
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
+    }
+
+    // Refresh Token 업데이터를 위한 편의 메서드
+    public void updateRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
     }
 }
