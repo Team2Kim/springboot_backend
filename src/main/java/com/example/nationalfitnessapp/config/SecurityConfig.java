@@ -1,5 +1,7 @@
 package com.example.nationalfitnessapp.config;
 
+import com.example.nationalfitnessapp.security.JwtAuthenticationFilter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -8,10 +10,14 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
+
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -27,8 +33,11 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/**").permitAll()  // 3-1. "/api/auth/**" 패턴의 URL 요청은 인증 없이 모두 허용
                         .requestMatchers("/api/exercises/**").permitAll()  // 3-2. "/api/exercises/**" 패턴의 URL 요청은 인증 없이 모두 허용
                         .requestMatchers("/api/facilities/**").permitAll()  // 3-3. "/api/facilities/**" 패턴의 URL 요청은 인증 없이 모두 허용
+                        .requestMatchers("/api/bookmarks/**").permitAll()
                         .anyRequest().authenticated()  // 3-4. 그 외의 모든 요청은 반드시 인증을 거쳐야 함
                 );
+
+        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
