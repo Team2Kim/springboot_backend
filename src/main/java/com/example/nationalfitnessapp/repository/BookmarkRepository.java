@@ -6,6 +6,9 @@ import com.example.nationalfitnessapp.domain.Exercise;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
 import java.util.Optional;
 
 public interface BookmarkRepository extends JpaRepository<Bookmark, Long>{
@@ -14,5 +17,6 @@ public interface BookmarkRepository extends JpaRepository<Bookmark, Long>{
     Optional<Bookmark> findByUserAndExercise(User user, Exercise exercise);
 
     // 특정 사용자의 모든 북마크 목록을 최신순으로 조회
-    Page<Bookmark> findAllByUserOrderByCreatedAtDesc(User user, Pageable pageable);
+    @Query("SELECT b FROM Bookmark b JOIN FETCH b.exercise WHERE b.user = :user ORDER BY b.createdAt DESC")
+    Page<Bookmark> findBookmarkBysWithExerciseByUser(@Param("user") User user, Pageable pageable);
 }
