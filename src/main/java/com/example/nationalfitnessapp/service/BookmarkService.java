@@ -67,7 +67,7 @@ public class BookmarkService {
         User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("해당 ID의 사용자를 찾을 수 없습니다."));
 
         // 1. Repository에서 Page<Bookmark>를 받아온다.
-        Page<Bookmark> bookmarksPage = bookmarkRepository.findAllByUserOrderByCreatedAtDesc(user, pageable);
+        Page<Bookmark> bookmarksPage = bookmarkRepository.findBookmarkBysWithExerciseByUser(user, pageable);
 
         // 2. 페이지의 map기능을 사용해 Page<BookmarkResponseDto>로 변환한다.
         return bookmarksPage.map(BookmarkResponseDto::new);
