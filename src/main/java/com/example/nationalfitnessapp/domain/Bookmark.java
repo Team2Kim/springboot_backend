@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.NoArgsConstructor;
+import lombok.Builder;
 
 import java.time.LocalDateTime;
 
@@ -28,6 +29,7 @@ public class Bookmark {
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
+    @Builder
     public Bookmark(User user, Exercise exercise){
         this.user = user;
         this.exercise = exercise;
