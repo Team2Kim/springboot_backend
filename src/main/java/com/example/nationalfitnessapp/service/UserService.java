@@ -116,4 +116,31 @@ public class UserService {
 
         return newTokenDto;
     }
+
+    /**
+     * 로그인 ID 중복을 확인하는 메서드
+     * @param loginId 중복을 확인하고싶은 loginId
+     * @return 중복이 없으면 true, 있으면 false 반환
+     * */
+    public boolean checkLoginIdDuplicated(String loginId) {
+        return !userRepository.existsByLoginId(loginId);
+    }
+
+    /**
+     * 닉네임 중복을 확인하는 메서드
+     * @param nickname 중복을 확인하고싶은 nickname
+     * @return 중복이 없으면 true, 있으면 false 반환
+     * */
+    public boolean checkNicknameDuplicated(String nickname) {
+        return !userRepository.existsByNickname(nickname);
+    }
+
+    /**
+     * 이메일 중복을 확인하는 메서드
+     * @param email 중복을 확인하고싶은 email
+     * @return 중복이 없으면 true, 있으면 false 반환
+     * */
+    public boolean checkEmailDuplicated(String email) {
+        return !userRepository.existsByEmail(email);
+    }
 }
