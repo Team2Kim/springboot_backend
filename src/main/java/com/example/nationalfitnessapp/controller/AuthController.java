@@ -9,10 +9,7 @@ import com.example.nationalfitnessapp.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -58,5 +55,47 @@ public class AuthController {
     public ResponseEntity<TokenDto> refresh(@RequestBody TokenRequestDto requestDto) {
         TokenDto newTokenDto = userService.refreshToken(requestDto.getAccessToken(), requestDto.getRefreshToken());
         return ResponseEntity.ok(newTokenDto);
+    }
+
+    /**
+     * 아이디 중복을 확인하는 API
+     * @param loginId 중복을 확인하고 싶은 로그인 ID
+     * @return 중복이 없는 경우 Ok, 중복인 경우 BadRequest 반환
+     * */
+    @GetMapping("/check-loginId")
+    public ResponseEntity<Void> checkLoginId(@RequestParam String loginId) {
+        if (userService.checkLoginIdDuplicated(loginId)) {
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
+    }
+
+    /**
+     * 닉네임 중복을 확인하는 API
+     * @param nickname 중복을 확인하고 싶은 닉네임
+     * @return 중복이 없는 경우 OK, 중복인 경우 BadRequest 반환
+     * */
+    @GetMapping("/check-nickname")
+    public ResponseEntity<Void> checkNickname(@RequestParam String nickname) {
+        if (userService.checkNicknameDuplicated(nickname)) {
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
+    }
+
+    /**
+     * 이메일 중복을 확인하는 API
+     * @param email 중복을 확인하고 싶은 이메일
+     * @return 중복이 없는 경우 OK, 중복인 경우 BadRequest 반환
+     * */
+    @GetMapping("/check-email")
+    public ResponseEntity<Void> checkEmail(@RequestParam String email) {
+        if (userService.checkEmailDuplicated(email)) {
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
     }
 }
