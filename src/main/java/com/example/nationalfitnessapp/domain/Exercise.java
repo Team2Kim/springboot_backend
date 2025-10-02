@@ -43,9 +43,6 @@ public class Exercise {
     @Column(length = 100)
     private String bodyPart; // trng_part_nm 또는 msrmt_part_nm
 
-    @Column(length = 255)
-    private String muscleName; // trng_mscl_nm (운동 근육명)
-
     @Column(length = 100)
     private String exerciseTool; // tool_nm (운동 도구)
 
