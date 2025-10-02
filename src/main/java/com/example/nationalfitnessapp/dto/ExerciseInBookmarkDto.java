@@ -15,7 +15,6 @@ public class ExerciseInBookmarkDto {
     private final String fitnessFactorName;
     private final String fitnessLevelName;
     private final String bodyPart;
-    private final String muscleName;
     private final String exerciseTool;
     private final Integer videoLengthSeconds;
     private final String resolution;
@@ -45,7 +44,6 @@ public class ExerciseInBookmarkDto {
         this.fitnessFactorName = exercise.getFitnessFactorName();
         this.fitnessLevelName = exercise.getFitnessLevelName();
         this.bodyPart = exercise.getBodyPart();
-        this.muscleName = exercise.getMuscleName();
         this.exerciseTool = exercise.getExerciseTool();
         this.videoLengthSeconds = exercise.getVideoLengthSeconds();
         this.resolution = exercise.getResolution();
