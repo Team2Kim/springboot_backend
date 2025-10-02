@@ -38,7 +38,6 @@ public class ExerciseController {
      * @param size (선택) 한 페이지에 보여줄 데이터 개수 (기본 10개)
      * @param targetGroup (선택) 타켓 그룹 (조건 검색에 사용)
      * @param fitnessFactorName (선택) 운동 체력 항목 (조건 검색에 사용)
-     * @param bodyPart (선택) 운동 부위 (조건 검색에 사용)
      * @param exerciseTool (선택) 운동 도구 (조건 검색에 사용)
      * @return 페이징된 Exercise 데이터
      * */
@@ -49,13 +48,12 @@ public class ExerciseController {
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(required = false) String targetGroup,
             @RequestParam(required = false) String fitnessFactorName,
-            @RequestParam(required = false) String bodyPart,
             @RequestParam(required = false) String exerciseTool
     ) {
         // 1. 페이징 및 정렬 정보 생성 (시작 페이지, 한 번에 받을 크기, 정렬 필드)
         Pageable pageable = PageRequest.of(page, size, Sort.by("title").ascending());
 
         // 2. 서비스를 호출하여 데이터 조회
-        return exerciseService.findAll(keyword, targetGroup, fitnessFactorName, bodyPart, exerciseTool, pageable);
+        return exerciseService.findAll(keyword, targetGroup, fitnessFactorName, exerciseTool, pageable);
     }
 }
