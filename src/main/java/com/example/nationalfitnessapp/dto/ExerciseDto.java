@@ -109,7 +109,6 @@ public class ExerciseDto {
                 .fitnessFactorName(this.ftnsFctrNm)
                 .fitnessLevelName(this.ftnsLvlNm)
                 .bodyPart(finalBodyPart) // 계산된 최종 부위 정보
-                .muscleName(this.trngMsclNm)
                 .exerciseTool(this.toolNm) // toolNm 필드 값을 직접 사용
                 .videoLengthSeconds(this.vdoLen)
                 .resolution(this.resolution)
