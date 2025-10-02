@@ -13,16 +13,12 @@ public class ExerciseSpecification {
         return (root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("title"), "%" + keyword + "%");
     }
 
-    public static Specification<Exercise> equalTargetGroup(String targetGroup) {
-        return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("targetGroup"), targetGroup);
+    public static Specification<Exercise> likeTargetGroup(String targetGroup) {
+        return (root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("description"), "%" + targetGroup + "%");
     }
 
-    public static Specification<Exercise> equalFitnessFactorName(String fitnessFactorName) {
-        return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("fitnessFactorName"), fitnessFactorName);
-    }
-
-    public static Specification<Exercise> equalBodyPart(String bodyPart) {
-        return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("bodyPart"), bodyPart);
+    public static Specification<Exercise> likeDescription(String condition) {
+        return (root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("description"), "%" + condition + "%");
     }
 
     public static Specification<Exercise> equalExerciseTool(String exerciseTool) {
