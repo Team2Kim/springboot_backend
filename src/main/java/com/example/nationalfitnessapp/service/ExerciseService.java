@@ -170,12 +170,11 @@ public class ExerciseService {
      * @param keyword 검색할 키워드 (없으면 전체 조회)
      * @param targetGroup 타켓 그룹 (조건 검색에 사용)
      * @param fitnessFactorName 운동 체력 항목 (조건 검색에 사용)
-     * @param bodyPart 운동 부위 (조건 검색에 사용)
      * @param exerciseTool 운동 도구 (조건 검색에 사용)
      * @param pageable 페이징 및 정렬 정보
      * @return 페이징된 Exercise 데이터
      * */
-    public Page<Exercise> findAll(String keyword, String targetGroup, String fitnessFactorName, String bodyPart, String exerciseTool, Pageable pageable){
+    public Page<Exercise> findAll(String keyword, String targetGroup, String fitnessFactorName, String exerciseTool, Pageable pageable){
 
         // 1. 기본 검색 조건 생성 (아무 조건도 없는 상태)
         Specification<Exercise> spec = ExerciseSpecification.Empty();
@@ -185,13 +184,10 @@ public class ExerciseService {
             spec = spec.and(ExerciseSpecification.likeTitle(keyword));
         }
         if (targetGroup != null && !targetGroup.isEmpty()) {
-            spec = spec.and(ExerciseSpecification.equalTargetGroup(targetGroup));
+            spec = spec.and(ExerciseSpecification.likeTargetGroup(targetGroup));
         }
         if (fitnessFactorName != null && !fitnessFactorName.isEmpty()) {
-            spec = spec.and(ExerciseSpecification.equalFitnessFactorName(fitnessFactorName));
-        }
-        if (bodyPart != null && !bodyPart.isEmpty()) {
-            spec = spec.and(ExerciseSpecification.equalBodyPart(bodyPart));
+            spec = spec.and(ExerciseSpecification.likeDescription(fitnessFactorName));
         }
         if (exerciseTool != null && !exerciseTool.isEmpty()) {
             spec = spec.and(ExerciseSpecification.equalExerciseTool(exerciseTool));
