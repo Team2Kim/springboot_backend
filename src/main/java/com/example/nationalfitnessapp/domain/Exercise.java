@@ -4,12 +4,14 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.HashSet; // Set과 HashSet import 추가
+import java.util.Set;
 
 @Getter
 @Setter
-@NoArgsConstructor(access = AccessLevel.PROTECTED) // JPA를 위한 기본 생성자
-@AllArgsConstructor // 모든 필드를 받는 생성자 (Builder가 사용)
-@Builder // 빌더 패턴 자동 생성
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@Builder
 @Entity
 @Table(name = "Exercise")
 public class Exercise {
@@ -18,88 +20,99 @@ public class Exercise {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long exerciseId;
 
-    @Column(nullable = false, length = 255) // 제목은 길 수 있으므로 넉넉하게
-    private String title; // vdo_ttl_nm
+    @Column(nullable = false, length = 255)
+    private String title;
 
-    @Column(length = 512, unique = true) // URL은 길고 고유해야 함
-    private String videoUrl; // file_url + file_nm
+    @Column(length = 512, unique = true)
+    private String videoUrl;
 
-    @Column(length = 1000) // 설명은 매우 길 수 있음
-    private String description; // vdo_desc
+    @Column(length = 1000)
+    private String description;
 
     // --- 운동 분류 정보 ---
     @Column(length = 255)
-    private String trainingName; // trng_nm (운동명, 카테고리로 활용 가능)
+    private String trainingName;
 
     @Column(length = 100)
-    private String targetGroup; // aggrp_nm (대상 연령층)
+    private String targetGroup;
 
     @Column(length = 100)
-    private String fitnessFactorName; // ftns_fctr_nm (체력 요인)
+    private String fitnessFactorName;
 
     @Column(length = 100)
-    private String fitnessLevelName; // ftns_lvl_nm (체력 수준)
+    private String fitnessLevelName;
 
     @Column(length = 100)
-    private String bodyPart; // trng_part_nm 또는 msrmt_part_nm
+    private String bodyPart;
+
+    // [삭제] 기존 muscleName 필드는 삭제되었습니다.
 
     @Column(length = 100)
-    private String exerciseTool; // tool_nm (운동 도구)
+    private String exerciseTool;
+
+    // [추가] Muscle 엔티티와의 다대다 관계 매핑
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "exercise_muscle", // 실제 DB의 연결 테이블 이름
+            joinColumns = @JoinColumn(name = "exercise_id"), // 이 엔티티(Exercise)를 참조하는 외래 키
+            inverseJoinColumns = @JoinColumn(name = "muscle_id") // 반대쪽 엔티티(Muscle)를 참조하는 외래 키
+    )
+    private Set<Muscle> muscles = new HashSet<>();
+
 
     // --- 영상 메타 정보 ---
     @Column
-    private Integer videoLengthSeconds; // vdo_len (영상 길이)
+    private Integer videoLengthSeconds;
 
     @Column(length = 50)
-    private String resolution; // resolution (해상도)
+    private String resolution;
 
     @Column
-    private Double fpsCount; // fps_cnt (초당 프레임 수)
+    private Double fpsCount;
 
     // --- 파일 정보 ---
     @Column(length = 255)
-    private String imageFileName; // img_file_nm
+    private String imageFileName;
 
     @Column(length = 512)
-    private String imageUrl; // img_file_url
+    private String imageUrl;
 
     @Column
-    private Long fileSize; // file_sz (파일 크기)
+    private Long fileSize;
 
-    // --- 프로그램 정보 (프로그램형 API에만 존재) ---
+    // --- 프로그램 정보 ---
     @Column(length = 100)
-    private String trainingAimName; // trng_aim_nm (운동 목적)
-
-    @Column(length = 100)
-    private String trainingPlaceName; // trng_plc_nm (운동 장소)
+    private String trainingAimName;
 
     @Column(length = 100)
-    private String trainingSectionName; // trng_se_nm (운동 구분)
+    private String trainingPlaceName;
 
     @Column(length = 100)
-    private String trainingStepName; // trng_step_nm (운동 단계)
+    private String trainingSectionName;
 
     @Column(length = 100)
-    private String trainingSequenceName; // trng_sqnc_nm (운동 순서)
+    private String trainingStepName;
+
+    @Column(length = 100)
+    private String trainingSequenceName;
 
     @Column(length = 50)
-    private String trainingWeekName; // trng_week_nm (운동 주차)
+    private String trainingWeekName;
 
     @Column(length = 50)
-    private String repetitionCountName; // rptt_tcnt_nm (반복 횟수)
+    private String repetitionCountName;
 
     @Column(length = 50)
-    private String setCountName; // set_cnt_nm (세트 횟수)
+    private String setCountName;
 
     // --- 기타 정보 ---
     @Column(length = 50)
-    private String operationName; // oper_nm (운영 명칭)
+    private String operationName;
 
     @Column(length = 50)
     private String jobYmd;
 
     // --- isGookmin100 플래그 ---
-    // API 데이터는 isGookmin100 = true, 직접 입력 데이터는 isGookmin100 = false 로 사용
     @Column(nullable = false)
     private boolean isGookmin100;
 }
