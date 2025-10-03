@@ -196,4 +196,16 @@ public class ExerciseService {
         // 최종 완성된 조건으로 Repository에 조회 요청
         return exerciseRepository.findAll(spec, pageable);
     }
+
+    /**
+     * 특정 근육 부위(들)를 타겟으로 하는 운동 영상을 검색하는 메서드
+     * @param muscleNames 검색할 근육 이름 목록
+     * @param pageable 페이징 정보
+     * @return 페이징된 Exercise 데이터
+     * */
+    public Page<Exercise> findExercisesByMuscles(List<String> muscleNames, Pageable pageable) {
+        Specification<Exercise> spec = ExerciseSpecification.containMuscles(muscleNames);
+
+        return exerciseRepository.findAll(spec, pageable);
+    }
 }
