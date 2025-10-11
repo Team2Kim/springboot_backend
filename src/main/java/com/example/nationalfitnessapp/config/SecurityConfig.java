@@ -34,6 +34,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/exercises/**").permitAll()  // 3-2. "/api/exercises/**" 패턴의 URL 요청은 인증 없이 모두 허용
                         .requestMatchers("/api/facilities/**").permitAll()  // 3-3. "/api/facilities/**" 패턴의 URL 요청은 인증 없이 모두 허용
                         .requestMatchers("/api/bookmarks/**").permitAll()
+                        .requestMatchers("/api/journals/**").permitAll()
                         .anyRequest().authenticated()  // 3-4. 그 외의 모든 요청은 반드시 인증을 거쳐야 함
                 );
 
