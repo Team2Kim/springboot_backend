@@ -5,7 +5,9 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "DailyLog")
@@ -23,18 +25,26 @@ public class DailyLog {
     private User user;
 
     @Column(nullable = false)
-    private LocalDateTime date;
+    private LocalDate date;
 
     @Column(columnDefinition = "TEXT")  // Mapping to TEXT type
     private String memo;
 
-    public DailyLog(User user, String memo){
+    @OneToMany(mappedBy = "dailyLog", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<DailyLogExercise> dailyLogExercises = new ArrayList<>();
+
+    public DailyLog(User user, LocalDate date, String memo){
         this.user = user;
+        this.date = date;
         this.memo = memo;
     }
 
-    @PrePersist  // Call this method when Entity generate
-    protected void onCreate() {
-        this.date = LocalDateTime.now();
+    public void addDailyLogExercise(DailyLogExercise dailyLogExercise) {
+        this.dailyLogExercises.add(dailyLogExercise);
+
+        // 무한 루프에 빠지지 않도록 체크
+        if (dailyLogExercise.getDailyLog() != this) {
+            dailyLogExercise.setDailyLog(this);
+        }
     }
 }
