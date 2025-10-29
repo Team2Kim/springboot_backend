@@ -10,7 +10,7 @@ import lombok.Builder;  // 필요한 값만, 순서에 상관없이, 객체 생�
 
 import java.time.LocalDateTime;
 @Entity
-@Table(name = "User")
+@Table(name = "user")
 @Getter
 @Setter
 @Builder
@@ -39,6 +39,21 @@ public class User {
     @JsonIgnore
     @Column(length = 512)
     private String refreshToken;
+
+    // 사용자의 운동 수준
+    // 예: "초급", "중급", "고급"
+    @Column(length = 100)
+    private String fitnessLevelName;
+
+    // 사용자의 주 운동 목적
+    // 예: "근력/근지구력", "심폐지구력", "재활"
+    @Column(length = 100)
+    private String fitnessFactorName;
+
+    // 사용자의 연령대
+    // 예: "유소년", "청소년", "성인", "어르신"
+    @Column(length = 100)
+    private String targetGroup;
 
     @PrePersist  // 엔티티가 생성될 때 이 메서드를 호출한다.
     protected void onCreate() {
