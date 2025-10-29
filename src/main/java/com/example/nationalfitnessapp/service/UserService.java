@@ -2,8 +2,11 @@ package com.example.nationalfitnessapp.service;
 
 import com.example.nationalfitnessapp.domain.User;
 import com.example.nationalfitnessapp.dto.TokenDto;
+import com.example.nationalfitnessapp.dto.UserProfileUpdateRequestDto;
+import com.example.nationalfitnessapp.dto.UserResponseDto;
 import com.example.nationalfitnessapp.repository.UserRepository;
 import com.example.nationalfitnessapp.security.JwtTokenProvider;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -142,5 +145,36 @@ public class UserService {
      * */
     public boolean checkEmailDuplicated(String email) {
         return !userRepository.existsByEmail(email);
+    }
+
+    /**
+     * 사용자의 프로필 정보(운동 선호도)를 업데이트하는 메서드
+     * @param userId 현재 로그인한 사용자의 ID
+     * @param requestDto 수정할 프로필 정보가 담긴 DTO
+     * @return 업데이트가 완료된 User 엔티티
+     */
+    @Transactional // 쓰기 작업이므로 @Transactional 추가
+    public User updateUserProfile(Long userId, UserProfileUpdateRequestDto requestDto) {
+        // 현재 사용자 정보를 DB에서 조회
+        User user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("사용자를 찾을 수 없습니다."));
+
+        // DTO에 담겨온 값으로 엔티티 필드 수정
+        user.setTargetGroup(requestDto.getTargetGroup());
+        user.setFitnessLevelName(requestDto.getFitnessLevelName());
+        user.setFitnessFactorName(requestDto.getFitnessFactorName());
+
+        return user;
+    }
+
+    /**
+     * 현재 로그인한 사용자의 프로필 정보를 조회하는 메서드
+     * @param userId 현재 로그인한 사용자의 ID
+     * @return 사용자 정보가 담긴 DTO
+     */
+    public UserResponseDto getUserProfile(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("사용자를 찾을 수 없습니다."));
+
+        // 엔티티를 DTO로 변환하여 반환
+        return new UserResponseDto(user);
     }
 }
