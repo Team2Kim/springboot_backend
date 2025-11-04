@@ -10,24 +10,29 @@ import java.util.List;
 
 public class ExerciseSpecification {
 
+    // 비어있는 디폴트 기본 검색 조건
     public static Specification<Exercise> Empty() {
         return (root, query, criteriaBuilder) -> null;
     }
 
+    // like 조건으로 제목 검색
     public static Specification<Exercise> likeTitle(String keyword) {
         return (root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("title"), "%" + keyword + "%");
     }
 
-    public static Specification<Exercise> likeTargetGroup(String targetGroup) {
-        return (root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("description"), "%" + targetGroup + "%");
+    // 질환치료를 검색할 때 description 에서 like 검색을 해야 한다.
+    public static Specification<Exercise> likeDescriptionForDisease(String disease) {
+        return (root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("description"), "%" + disease + "%");
     }
 
-    public static Specification<Exercise> likeDescription(String condition) {
-        return (root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("description"), "%" + condition + "%");
-    }
-
+    // 맨몸, 머신, 의자, 짐볼, 폼롤러, 탄력밴드, 기타가 있는데 이렇게 equal로 되어야 한다.
     public static Specification<Exercise> equalExerciseTool(String exerciseTool) {
         return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("exerciseTool"), exerciseTool);
+    }
+
+    // 운동 부위 bodyPart (몸통, 상체, 전신, 하체, 기타) equal 조건 검색
+    public static Specification<Exercise> equalBodyPart(String bodyPart) {
+        return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("bodyPart"), bodyPart);
     }
 
     // targetGroup 검색 조건
