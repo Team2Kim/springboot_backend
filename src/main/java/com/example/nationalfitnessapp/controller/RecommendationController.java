@@ -1,6 +1,7 @@
 package com.example.nationalfitnessapp.controller;
 
 import com.example.nationalfitnessapp.domain.Exercise;
+import com.example.nationalfitnessapp.dto.ExerciseResponseDto;
 import com.example.nationalfitnessapp.security.UserDetailsImpl;
 import com.example.nationalfitnessapp.service.RecommendationService;
 import lombok.RequiredArgsConstructor;
@@ -27,12 +28,12 @@ public class RecommendationController {
      * @return 추천된 Exercise 객체 리스트
      */
     @GetMapping
-    public ResponseEntity<List<Exercise>> getRecommendations(
+    public ResponseEntity<List<ExerciseResponseDto>> getRecommendations(
             @AuthenticationPrincipal UserDetailsImpl userDetails,
             @RequestParam(defaultValue = "3") int count
     ) {
         Long userId = userDetails.getUser().getUserId();
-        List<Exercise> recommendations = recommendationService.recommendExercise(userId, count);
+        List<ExerciseResponseDto> recommendations = recommendationService.recommendExercise(userId, count);
         return ResponseEntity.ok(recommendations);
     }
 
