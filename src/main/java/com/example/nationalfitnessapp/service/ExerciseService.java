@@ -49,6 +49,7 @@ public class ExerciseService {
 
     /**
      * 모든 운동 영상 API를 호출하여 DB에 저장하는 작업을 총괄하는 메서드
+     * 데이터를 DB에 저장 완료했으니 더 이상 사용하지 않는다.
      */
 //    @Transactional
 //    public void fetchAndSaveAllExercises() {
@@ -173,11 +174,12 @@ public class ExerciseService {
      * @param fitnessFactorName 운동 체력 항목 (조건 검색에 사용)
      * @param exerciseTool 운동 도구 (조건 검색에 사용)
      * @param disease 질환 항목 (조건 검색에 사용)
+     * @param fitnessLevelName 운동 레벨 (조건 검색에 사용)
      * @param pageable 페이징 및 정렬 정보
      * @return 페이징된 Exercise 데이터
      * */
     public Page<Exercise> findAll(String keyword, String targetGroup, String fitnessFactorName,
-                                  String bodyPart, String exerciseTool, String disease, Pageable pageable){
+                                  String bodyPart, String exerciseTool, String disease, String fitnessLevelName, Pageable pageable){
 
         // 1. 기본 검색 조건 생성
         Specification<Exercise> spec = ExerciseSpecification.Empty();
@@ -208,6 +210,11 @@ public class ExerciseService {
         if (disease != null && !disease.isEmpty()) {
             // '재활' 같은 키워드는 description을 검색
             spec = spec.and(ExerciseSpecification.likeDescriptionForDisease(disease));
+        }
+
+        // [추가] fitnessLevelName을 키워드로 검색할 수 있게끔 로직 추가
+        if (fitnessLevelName != null && !fitnessLevelName.isEmpty()) {
+            spec = spec.and(ExerciseSpecification.equalFitnessLevelName(fitnessLevelName));
         }
 
         // [추가] /by-muscle API와의 통합을 위한 muscles 로직은 이전에 제외했으므로,

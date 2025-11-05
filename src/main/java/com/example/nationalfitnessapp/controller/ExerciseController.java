@@ -42,13 +42,14 @@ public class ExerciseController {
             @RequestParam(required = false) String fitnessFactorName,
             @RequestParam(required = false) String bodyPart,
             @RequestParam(required = false) String exerciseTool,
-            @RequestParam(required = false) String disease
+            @RequestParam(required = false) String disease,
+            @RequestParam(required = false) String fitnessLevelName
     ) {
         // 1. 페이징 및 정렬 정보 생성 (시작 페이지, 한 번에 받을 크기, 정렬 필드)
         Pageable pageable = PageRequest.of(page, size, Sort.by("title").ascending());
 
         // 2. 서비스를 호출하여 데이터 조회
-        return exerciseService.findAll(keyword, targetGroup, fitnessFactorName, bodyPart, exerciseTool, disease, pageable);
+        return exerciseService.findAll(keyword, targetGroup, fitnessFactorName, bodyPart, exerciseTool, disease, fitnessLevelName, pageable);
     }
 
     /**
