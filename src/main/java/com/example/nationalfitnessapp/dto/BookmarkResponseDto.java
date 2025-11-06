@@ -10,11 +10,11 @@ public class BookmarkResponseDto {
 
     private final Long bookmarkId;
     private final LocalDateTime createdAt;
-    private final ExerciseInBookmarkDto exercise;
+    private final ExerciseResponseDto exercise;
 
     public BookmarkResponseDto(Bookmark bookmark){
         this.bookmarkId = bookmark.getBookmarkId();
         this.createdAt = bookmark.getCreatedAt();
-        this.exercise = new ExerciseInBookmarkDto(bookmark.getExercise());
+        this.exercise = new ExerciseResponseDto(bookmark.getExercise());
     }
 }
