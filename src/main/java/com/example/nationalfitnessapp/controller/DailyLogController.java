@@ -1,5 +1,6 @@
 package com.example.nationalfitnessapp.controller;
 
+import com.example.nationalfitnessapp.domain.embed.AIFeedback;
 import com.example.nationalfitnessapp.dto.*;
 import com.example.nationalfitnessapp.security.UserDetailsImpl;
 import com.example.nationalfitnessapp.service.DailyLogService;
@@ -109,5 +110,38 @@ public class DailyLogController {
     ) {
         Long userId = userDetails.getUser().getUserId();
         return ResponseEntity.ok(dailyLogService.getLogByDate(userId, date));
+    }
+
+    /**
+     * 특정 일지에 AI 피드백을 저장(업데이트)하는 API
+     * @param logId 피드백을 저장할 일지의 ID
+     * @param feedback AI가 생성한 JSON 객체
+     */
+    @PutMapping("/{logId}/feedback")
+    public ResponseEntity<Void> saveAiFeedback(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @PathVariable Long logId,
+            @RequestBody AIFeedback feedback
+    ) {
+        Long userId = userDetails.getUser().getUserId();
+        dailyLogService.saveAiFeedback(userId, logId, feedback);
+
+        return ResponseEntity.ok().build();
+    }
+
+    /**
+     * 특정 일지에 저장된 AI 피드백을 조회하는 API
+     * @param logId 피드백을 조회할 일지의 ID
+     * @param userDetails 토큰에서 추출된 현재 로그인한 사용자 정보
+     * @return AIFeedback JSON 객체
+     */
+    @GetMapping("/{logId}/feedback")
+    public ResponseEntity<AIFeedback> getAiFeedback(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @PathVariable Long logId
+    ) {
+        Long userId = userDetails.getUser().getUserId();
+        AIFeedback feedback  = dailyLogService.getAiFeedback(userId, logId);
+        return ResponseEntity.ok(feedback);
     }
 }

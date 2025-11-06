@@ -29,10 +29,15 @@ public class DailyLogExercise {
     @Column(nullable = false)
     private int exerciseTime;
 
-    public DailyLogExercise(DailyLog dailyLog, Exercise exercise, String intensity, int exerciseTime){
+    // [추가] 개별 운동에 대한 메모 필드
+    @Column(columnDefinition = "TEXT")
+    private String exerciseMemo;
+
+    public DailyLogExercise(DailyLog dailyLog, Exercise exercise, String intensity, int exerciseTime, String exerciseMemo){
         this.dailyLog = dailyLog;
         this.exercise = exercise;
         this.intensity = intensity;
         this.exerciseTime = exerciseTime;
+        this.exerciseMemo = exerciseMemo;
     }
 }

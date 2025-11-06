@@ -7,4 +7,5 @@ public class DailyLogExerciseRequestDto {
     private Long exerciseId;
     private String intensity;
     private int exerciseTime;
+    private String exerciseMemo;
 }
