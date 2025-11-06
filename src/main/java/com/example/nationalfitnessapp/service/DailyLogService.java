@@ -59,7 +59,7 @@ public class DailyLogService {
     public DailyLogResponseDto addExerciseToLog(Long logId, DailyLogExerciseRequestDto requestDto){
         DailyLog dailyLog = dailyLogRepository.findById(logId).orElseThrow(() -> new EntityNotFoundException("일지를 찾을 수 없습니다."));
         Exercise exercise = exerciseRepository.findById(requestDto.getExerciseId()).orElseThrow(() -> new EntityNotFoundException("운동 정보를 찾을 수 없습니다."));
-        DailyLogExercise dailyLogExercise = new DailyLogExercise(dailyLog, exercise, requestDto.getIntensity(), requestDto.getExerciseTime());
+        DailyLogExercise dailyLogExercise = new DailyLogExercise(dailyLog, exercise, requestDto.getIntensity(), requestDto.getExerciseTime(), requestDto.getExerciseMemo());
 
         // 양방향 연관관계 메서드를 사용해 일지에 운동 기록 추가
         dailyLog.addDailyLogExercise(dailyLogExercise);
@@ -123,6 +123,7 @@ public class DailyLogService {
 
         logExercise.setIntensity(requestDto.getIntensity());
         logExercise.setExerciseTime(requestDto.getExerciseTime());
+        logExercise.setExerciseMemo(requestDto.getExerciseMemo());
     }
 
     /**

@@ -6,4 +6,5 @@ import lombok.Getter;
 public class DailyLogExerciseUpdateRequestDto {
     private String intensity;
     private int exerciseTime;
+    private String exerciseMemo;
 }
