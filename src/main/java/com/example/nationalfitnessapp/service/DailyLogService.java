@@ -4,6 +4,7 @@ import com.example.nationalfitnessapp.domain.DailyLog;
 import com.example.nationalfitnessapp.domain.DailyLogExercise;
 import com.example.nationalfitnessapp.domain.Exercise;
 import com.example.nationalfitnessapp.domain.User;
+import com.example.nationalfitnessapp.domain.embed.AIFeedback;
 import com.example.nationalfitnessapp.dto.DailyLogCreateRequestDto;
 import com.example.nationalfitnessapp.dto.DailyLogExerciseRequestDto;
 import com.example.nationalfitnessapp.dto.DailyLogExerciseUpdateRequestDto;
@@ -43,7 +44,11 @@ public class DailyLogService {
         dailyLogRepository.findByUserAndDate(user, requestDto.getDate())
                 .ifPresent(log -> {throw new IllegalStateException("해당 날짜에 이미 작성된 일지가 있습니다.");});
 
-        DailyLog dailyLog = new DailyLog(user, requestDto.getDate(), requestDto.getMemo());
+        DailyLog dailyLog = DailyLog.builder()
+                .user(user)
+                .date(requestDto.getDate())
+                .memo(requestDto.getMemo())
+                .build();
         DailyLog saveDailyLog = dailyLogRepository.save(dailyLog);
 
         return new DailyLogResponseDto(saveDailyLog);
@@ -155,5 +160,50 @@ public class DailyLogService {
 
         // Entity를 DTO로 변환하여 반환
         return new DailyLogResponseDto(dailyLog);
+    }
+
+    /**
+     * 특정 일지에 AI가 생성한 피드백을 저장(업데이트)하는 메서드
+     * @param userId 현재 로그인한 사용자 ID
+     * @param logId 피드백을 저장할 일지 ID
+     * @param feedback 클라이언트가 보낸 AI 피드백 JSON 객체
+     */
+    @Transactional
+    public void saveAiFeedback(Long userId, Long logId, AIFeedback feedback) {
+        // 1. 일지 조회
+        DailyLog dailyLog = dailyLogRepository.findById(logId).orElseThrow(() -> new EntityNotFoundException("일지를 찾을 수 없습니다."));
+
+        // 2. 소유권 확인
+        if (!dailyLog.getUser().getUserId().equals(userId)) {
+            throw new AccessDeniedException("해당 일지에 대한 수정 권한이 없습니다.");
+        }
+
+        // 3. 피드백 설정 및 저장
+        dailyLog.setAiFeedback(feedback);
+        dailyLogRepository.save(dailyLog);  // @Transactional 이므로 생략 가능하나, 명시적으로 작성해 보기 좋게 함
+    }
+
+    /**
+     * 턱정 일지에 저장된 AI 피드백을 조회하는 메서드
+     * @param userId 현재 로그인한 사용자 ID (소유권 확인용)
+     * @param logId 피드백을 조회할 일지 ID
+     * @return 저장된 AI 피드백 객체
+     */
+    public AIFeedback getAiFeedback(Long userId, long logId) {
+        // 1. 일지 조회
+        DailyLog dailyLog = dailyLogRepository.findById(logId).orElseThrow(() -> new EntityNotFoundException("일지를 찾을 수 없습니다."));
+
+        // 2. 소유권 확인
+        if (!dailyLog.getUser().getUserId().equals(userId)) {
+            throw new AccessDeniedException("해당 일지에 대한 조회 권한이 없습니다.");
+        }
+
+        // 3. 저장된 피드백이 있는지 확인
+        if (dailyLog.getAiFeedback() == null) {
+            throw new EntityNotFoundException("아직 AI 피드백이 생성되지 않은 일지입니다.");
+        }
+
+        // 4. 저장된 피드백 객체 반환
+        return dailyLog.getAiFeedback();
     }
 }

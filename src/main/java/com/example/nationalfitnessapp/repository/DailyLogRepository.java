@@ -14,10 +14,11 @@ public interface DailyLogRepository extends JpaRepository<DailyLog, Long>{
     // 특정 사용자의 특정 날짜 일지를 조회
     Optional<DailyLog> findByUserAndDate(User user, LocalDate date);
 
+    // 이 쿼리 의미는?
     @Query("SELECT dl FROM DailyLog dl " +
-            "LEFT JOIN FETCH dl.dailyLogExercises dle " +
-            "LEFT JOIN FETCH dle.exercise e " +
-            "LEFT JOIN FETCH e.muscles m " +
-            "WHERE dl.user = :user AND dl.date = :date")
-    Optional<DailyLog> findByUserAndDateWithDetails(@Param("user") User user, @Param("date") LocalDate date);
+    "JOIN FETCH dl.user " +
+    "LEFT JOIN FETCH dl.dailyLogExercises dle " +
+    "LEFT JOIN FETCH dle.exercise " +
+    "WHERE dl.logId = :logId")
+    Optional<DailyLog> findByIdWithDetails(@Param("logId") Long logId);
 }
