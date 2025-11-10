@@ -31,7 +31,7 @@ public class Exercise {
 
     // --- 운동 분류 정보 ---
     @Column(length = 255)
-    private String trainingName;
+    private String standardTitle;
 
     @Column(length = 100)
     private String targetGroup;
