@@ -70,7 +70,7 @@ public class ExerciseDto {
     @XmlElement(name = "trng_mscl_nm", required = false)
     private String trngMsclNm;
     @XmlElement(name = "trng_nm", required = false)
-    private String trngNm;
+    private String stdTitle;
     @XmlElement(name = "trng_part_nm", required = false)
     private String trngPartNm;
     @XmlElement(name = "trng_plc_nm", required = false)
@@ -104,7 +104,7 @@ public class ExerciseDto {
                 .title(this.vdoTtlNm)
                 .videoUrl(fullVideoUrl)
                 .description(this.vdoDesc)
-                .trainingName(this.trngNm)
+                .standardTitle(this.stdTitle)
                 .targetGroup(this.aggrpNm)
                 .fitnessFactorName(this.ftnsFctrNm)
                 .fitnessLevelName(this.ftnsLvlNm)

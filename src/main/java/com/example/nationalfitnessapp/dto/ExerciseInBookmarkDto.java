@@ -10,7 +10,7 @@ public class ExerciseInBookmarkDto {
     private final String title;
     private final String videoUrl;
     private final String description;
-    private final String trainingName;
+    private final String standardTitle;
     private final String targetGroup;
     private final String fitnessFactorName;
     private final String fitnessLevelName;
@@ -39,7 +39,7 @@ public class ExerciseInBookmarkDto {
         this.title = exercise.getTitle();
         this.videoUrl = exercise.getVideoUrl();
         this.description = exercise.getDescription();
-        this.trainingName = exercise.getTrainingName();
+        this.standardTitle = exercise.getStandardTitle();
         this.targetGroup = exercise.getTargetGroup();
         this.fitnessFactorName = exercise.getFitnessFactorName();
         this.fitnessLevelName = exercise.getFitnessLevelName();
