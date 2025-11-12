@@ -1,8 +1,10 @@
 package com.example.nationalfitnessapp.controller;
 
 import com.example.nationalfitnessapp.domain.Exercise;
+import com.example.nationalfitnessapp.dto.ExerciseResponseDto;
 import com.example.nationalfitnessapp.service.ExerciseService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -68,5 +70,18 @@ public class ExerciseController {
         // 이름순으로 정렬
         Pageable pageable = PageRequest.of(page, size, Sort.by("title").ascending());
         return exerciseService.findExercisesByMuscles(muscles, pageable);
+    }
+
+    /**
+     * 여러 개의 ID로 운동 영상 목록을 조회하는 API
+     * @param ids 쉼표로 구분된 exerciseId 목록(예: 1,2,3)
+     * @return ExerciseResponseDto 객체 리스트
+     */
+    @GetMapping("/by-ids")
+    public ResponseEntity<List<ExerciseResponseDto>> getExercisesByIds(
+            @RequestParam("id") List<Long> ids
+    ) {
+        List<ExerciseResponseDto> exercises = exerciseService.findExercisesByIds(ids);
+        return ResponseEntity.ok(exercises);
     }
 }
