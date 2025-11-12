@@ -20,6 +20,11 @@ public class ExerciseSpecification {
         return (root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("title"), "%" + keyword + "%");
     }
 
+    // like 조건으로 standard_title 제목 검색
+    public static Specification<Exercise> likeStandardTitle(String keyword) {
+        return (root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("standardTitle"), "%" + keyword + "%");
+    }
+
     // 질환치료를 검색할 때 description 에서 like 검색을 해야 한다.
     public static Specification<Exercise> likeDescriptionForDisease(String disease) {
         return (root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("description"), "%" + disease + "%");

@@ -104,7 +104,8 @@ public class ExerciseService {
 
         // 2. 각 파라미터가 존재하면, AND 조건으로 레고 블록을 조립
         if (keyword != null && !keyword.isEmpty()) {
-            spec = spec.and(ExerciseSpecification.likeTitle(keyword));
+            Specification<Exercise> keywordSpec = ExerciseSpecification.likeTitle(keyword).or(ExerciseSpecification.likeStandardTitle(keyword));
+            spec = spec.and(keywordSpec);
         }
         if (targetGroup != null && !targetGroup.isEmpty()) {
             // [수정] '공통' 로직이 포함된 filterByTargetGroup 사용
